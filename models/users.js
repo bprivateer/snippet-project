@@ -3,9 +3,14 @@ mongoose.Promise = require("bluebird");
 const bcrypt = require('bcryptjs');
 const Schema = mongoose.Schema;
 
+mongoose.connect("mongodb://localhost:27017/Snippetuser");
+
+
 const userSchema = new mongoose.Schema({
-  username: { type: String, unique: true, lowercase: true, required: true },
-  passwordHash: { type: String, required: true }
+  username : {type: String, required: true, unique:true},
+  passwordhash : {type: String, required: true},
+  name : {type: String, required: true},
+  email : {type: String, required: true}
 });
 
 userSchema.virtual('password')

@@ -1,5 +1,5 @@
 const express = require("express");
-const User = require("../models/user");
+const User = require("../models/users");
 const Snippet = require("../models/snippets");
 const router = express.Router();
 const mongoose = require("mongoose");
@@ -56,6 +56,15 @@ router.post("/signup", function(req, res) {
   });
 });
 
+router.get('/edit', function(req, res){
+   User.find({})
+   User.update({})
+   .then(function(data){
+     console.log(data);
+   }).catch(function(err){
+     console.log(err);
+   })
+})
 router.get("/user", requireLogin, function(req, res) {
   res.render("user", {username: req.user.username});
 });
