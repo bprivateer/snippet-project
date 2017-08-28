@@ -27,7 +27,7 @@ const login = function (req, res, next) {
 router.get("/", login, function(req, res) {
 
 
-  res.render("index", {
+  res.render("login", {
       messages: res.locals.getMessages()
   });
 });

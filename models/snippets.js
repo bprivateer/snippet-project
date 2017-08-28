@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 mongoose.Promise = require("bluebird");
 const bcrypt = require('bcryptjs');
 const Schema = mongoose.Schema;
+// const Snippet =
 
 mongoose.connect("mongodb://localhost:27017/Snippetuser");
 
@@ -14,6 +15,6 @@ const snippetSchema = new mongoose.Schema({
 
 });
 
-const User = mongoose.model("Snippet", snippetSchema);
+const Snippet = mongoose.model("Snippet", snippetSchema);
 
-module.exports = Snippets;
+module.exports = Snippet;
