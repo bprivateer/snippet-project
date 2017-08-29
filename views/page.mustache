@@ -1,0 +1,18 @@
+<a href='/create'>CREATE SNIPPET</a>
+<br>
+THis is where all the snippets are supposed to be displayed,
+
+
+
+<div class="snippets">
+{{#snippets}}
+<div class="snippetList">
+  Who made this: {{name}}<br>
+  Language: {{language}}<br>
+  Title: {{snippetName}}<br>
+  Code: {{snippet}}<br>
+  </div>
+  <a href="/edit/{{_id}}">EDIT MY SNIPPET</a>
+  <a href="/delete/{{_id}}">DELETE MY SNIPPET</a>
+{{/snippets}}
+</div>

@@ -8,9 +8,9 @@ mongoose.connect("mongodb://localhost:27017/Snippetuser");
 
 const userSchema = new mongoose.Schema({
   username : {type: String, required: true, unique:true},
-  passwordhash : {type: String, required: true},
+  passwordHash : {type: String, required: true},
   name : {type: String, required: true},
-  email : {type: String, required: true}
+  email : {type: String}
 });
 
 userSchema.virtual('password')
