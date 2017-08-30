@@ -9,7 +9,6 @@ mongoose.connect("mongodb://localhost:27017/userDB");
 
 const requireLogin = function (req, res, next) {
   if (req.user) {
-    console.log(req.user)
     next()
   } else {
     res.redirect('/');
@@ -23,6 +22,9 @@ const login = function (req, res, next) {
     next();
   }
 };
+router.get("/",  function(req, res) {
+  res.render("login");
+});
 
 router.post('/login', passport.authenticate('local', {
     successRedirect: '/user',
@@ -30,34 +32,67 @@ router.post('/login', passport.authenticate('local', {
     failureFlash: true
 }));
 
-router.get("/",  function(req, res) {
-  res.render("login");
-});
-
 router.get("/login", login, function(req, res){
   User.find({})
   .then(function(data) {
-    console.log("DATA", data);
     res.render('login');
   })
 
-  // res.render('login', { messages: res.locals.getMessages()})
 })
 
 
 router.get('/index', requireLogin, function(req, res){
-
   res.render("page")
 })
 
+router.get('/language/:language', function(req, res){
+   Snippet.find({language: req.params.language})
+   .then(function(data){
+     res.render('snippets',{data: data}, req.params.user)
+     console.log(data);
+   })
+   .catch(function(err){
+     console.log(err);
+   })
+})
+
+router.get('/single/:id', function(req, res){
+   Snippet.findById(req.params.id)
+   .then(function(data){
+     res.render('snippets',{data: data})
+     console.log(data);
+   })
+   .catch(function(err){
+     console.log(err);
+   })
+})
+
+
+
+router.get('/tags/:tag', function(req, res){
+   Snippet.find({})
+   .then(function(data){
+     console.log(data);
+     let tagData = [];
+     data.forEach(function(snip) {
+       snip.tags.forEach(function(tag) {
+         if (tag === req.params.tag) {
+           tagData.push(snip);
+         }
+       })
+     })
+     res.render('snippets',{data: tagData}, req.params.user)
+   })
+   .catch(function(err){
+     console.log(err);
+   })
+})
 
 router.get("/signup", function(req, res) {
   res.render("signup");
 });
 
-
-
-const bcrypt = require('bcryptjs');
+// const bcrypt = require('bcryptjs');
 
 
 router.post("/signup", function(req, res) {
@@ -69,34 +104,42 @@ router.post("/signup", function(req, res) {
     email: req.body.email,
 
   }).then(function(data) {
-    console.log(data);
     res.redirect("/index");
   })
   .catch(function(err) {
-    console.log(err);
     res.redirect("/signup");
   });
 });
 
-router.get('/edit/:id', function(req, res){
+router.get('/editdelete/:id', function(req, res){
 Snippet.findOne({_id: req.params.id})
 .then(function(data){
-  console.log("log here", req.user.id);
   if (data.createdBy === req.user.id) {
-      res.render('editSnippet', data )
+    res.render('editSnippet', data )
+  } else {
+    res.redirect('/user')
   }
 })
 .catch(function(err){
   res.redirect('/user')
 })
-  // res.render('editSnippet')
+
 })
 
+// WHen i edit make sure i pass in two parameters becuase
+//how will the computer kno which ssnippet the user is trying to edit?
+//ex. edit/:id/:language
+
 router.post('/edit/:id', function(req, res){
-  console.log(req.body);
+  req.body.tags = req.body.tags.split(',');
+  console.log("THIS LOGS IN THE CONSOLE.");
+  let newArr = req.body.tags.map(function(tag) {
+    console.log("tag is: '" + tag.trim() + "'.");
+    return tag.trim();
+  });
+  req.body.tags = newArr;
    Snippet.update({_id: req.params.id}, req.body)
    .then(function(data){
-     console.log("LOOOOOOOOG");
      res.redirect('/user')
    })
    .catch(function(err){
@@ -106,27 +149,24 @@ router.post('/edit/:id', function(req, res){
 })
 
 ////// deleting ...
-router.get('/delete/:id', function(req, res){
-Snippet.findOne({_id: req.params.id})
-.then(function(data){
-  console.log("log here", req.user.id);
-  if (data.createdBy === req.user.id) {
-      res.render('editSnippet', data)
-  } else {
-    res.redirect('/user')
-  }
-})
-.catch(function(err){
-  res.redirect('/page')
-})
-  // res.render('editSnippet')
-})
+// router.get('/delete/:id', function(req, res){
+// Snippet.findOne({_id: req.params.id})
+// .then(function(data){
+//   if (data.createdBy === req.user.id) {
+//       res.render('editSnippet', data)
+//   } else {
+//     res.redirect('/user')
+//   }
+// })
+// .catch(function(err){
+//   res.redirect('/page')
+// })
+//
+// })
 
 router.post('/delete/:id', function(req, res){
-  console.log(req.body);
    Snippet.deleteOne({_id: req.params.id})
    .then(function(data){
-     console.log("LOOOOOOOOG");
      res.redirect('/user')
    })
    .catch(function(err){
@@ -135,45 +175,50 @@ router.post('/delete/:id', function(req, res){
 
 })
 
-
-
-
-
 router.get("/user", requireLogin, function(req, res) {
 
 Snippet.find({})
 .then(function(data){
+  data = data.map(function(snip) {
+    if (snip.createdBy === req.user._id.toString()) {
+      snip.canEdit = true;
+    } else {
+      snip.canEdit = false;
+    }
+    return snip;
+  })
+  console.log(data[9].createdBy, req.user._id);
 res.render('page', {snippets : data})
 })
-// , username : req.user.username
 .catch(function(err){
-  console.log(err);
   res.redirect('login')
 })
 
 });
 
 router.get('/create', function(req, res){
-  console.log("hey i created one");
   res.render("createsnippet")
 })
 
 router.post('/create', function(req, res){
+  let tags = req.body.tags.split(',');
+  tags = tags.map(function(tag) {
+    console.log("tag is: '" + tag.trim() + "'.");
+    return tag.trim();
+  });
 
   Snippet.create({
     name : req.body.name,
     language : req.body.language,
     snippetName : req.body.snippetName,
     snippet : req.body.snippet,
-    tags : [req.body.tags],
+    tags : tags,
     createdBy: req.user._id
   })
   .then(function(data){
-    console.log("SNIPPET", data);
     res.redirect('/user')
   })
   .catch(function(err){
-    console.log(err);
     res.redirect('/create')
   });
 

@@ -12,7 +12,7 @@ const snippetSchema = new mongoose.Schema({
   language : { type: String},
   snippetName : {type: String, required: false},
   snippet : {type: String, required: false},
-  tags : {type: String, lowercase: true},
+  tags : {type: [String], lowercase: true},
   createdBy: {type: String, required: true}
 
 

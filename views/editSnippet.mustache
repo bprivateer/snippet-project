@@ -1,24 +1,38 @@
 
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Edit/Delete your Snippet</title>
+    <link rel="stylesheet" href="main.css">
 
-<form class="" action="/edit/{{_id}}" method="post">
-  <h2>Edit my Snippet</h2><br>
-  name :
-  <input type="text" name="name" value="{{name}}" placeholder="">
-  <h4></h4><br>
-  <input type="text" name="snippetName" value="{{snippetName}}" placeholder="">
-  <h3>language : </h3><br>
-    Code :<br>
-  <input type="text" name="language" value="{{language}}" placeholder="">
+  </head>
 
-  <textarea name="snippet" value="{{snippet}}" placeholder="">
-  </textarea>
-  tags ? : <br>
-  <input type="text" name="tags" value="{{tags}}" placeholder="">
+  <body>
 
-  <button type="submit">Edit!</button>
+    <form class="" action="/edit/{{_id}}" method="post">
+      <h2>Edit my Snippet</h2><br>
+      name :
+      <input type="text" name="name" value="{{name}}" placeholder="">
+      <h4></h4><br>
+      <input type="text" name="snippetName" value="{{snippetName}}" placeholder="">
+      <h3>language : </h3><br>
+        Code :<br>
+      <input type="text" name="language" value="{{language}}" placeholder="">
+      <br>
+      <textarea name="snippet"placeholder="">{{snippet}}</textarea>
+      tags ? : <br>
+      <input type="text" name="tags" value="{{tags}}" placeholder="">
+      <br>
 
-</form>
-<form class="" action="/delete/{{_id}}" method="post">
-  <button type="submit">DELETE</button>
+      <button type="submit">Edit!</button>
 
-</form>
+    </form>
+    <form class="" action="/delete/{{_id}}" method="post">
+      <button type="submit">DELETE</button>
+
+    </form>
+
+
+  </body>
+</html>

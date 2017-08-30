@@ -1,18 +1,28 @@
 <a href='/create'>CREATE SNIPPET</a>
 <br>
-THis is where all the snippets are supposed to be displayed,
-
+<br>
+This is a list of all the snippets that are..<br>
 
 
 <div class="snippets">
 {{#snippets}}
 <div class="snippetList">
-  Who made this: {{name}}<br>
-  Language: {{language}}<br>
-  Title: {{snippetName}}<br>
-  Code: {{snippet}}<br>
+  <div class="snip">Who made this: {{name}}<br></div>
+  <div class="snip">Language: <a href="/language/{{language}}">{{language}}</a>"<br></div>
+  <div class="snip">Title: {{snippetName}}<br></div>
+  <div class="snip">Code: {{snippet}}<br></div>
+  <div class="tags">
+    {{#tags}}
+      <a href="/tags/{{.}}">{{.}}</a>
+    {{/tags}}
   </div>
-  <a href="/edit/{{_id}}">EDIT MY SNIPPET</a>
-  <a href="/delete/{{_id}}">DELETE MY SNIPPET</a>
+  <div class="snippetLinks">
+    <a href='/single/{{_id}}'>View this snippet</a>
+  {{#canEdit}}
+    <div class="snip"><a href="/editdelete/{{_id}}">EDIT OR DELETE</a><br></div>
+  {{/canEdit}}
+  <!-- <div class="snip"><a href="/delete/{{_id}}">DELETE</a></div> -->
+</div>
+</div>
 {{/snippets}}
 </div>
