@@ -1,6 +1,6 @@
+<br><br>
 <a href='/create'>CREATE SNIPPET</a>
-<br>
-<br>
+<br><br>
 This is a list of all the snippets that are..<br>
 
 
@@ -10,14 +10,14 @@ This is a list of all the snippets that are..<br>
   <div class="snip">Who made this: {{name}}<br></div>
   <div class="snip">Language: <a href="/language/{{language}}">{{language}}</a>"<br></div>
   <div class="snip">Title: {{snippetName}}<br></div>
-  <div class="snip">Code: {{snippet}}<br></div>
+  <div class="snip">Code: {{snippet}}<br></div><br>
   <div class="tags">
     {{#tags}}
       <a href="/tags/{{.}}">{{.}}</a>
     {{/tags}}
-  </div>
-  <div class="snippetLinks">
-    <a href='/single/{{_id}}'>View this snippet</a>
+  </div><br>
+  <div class="snippetLinks"><br>
+    <a href='/single/{{_id}}'>View this snippet</a><br><br>
   {{#canEdit}}
     <div class="snip"><a href="/editdelete/{{_id}}">EDIT OR DELETE</a><br></div>
   {{/canEdit}}
