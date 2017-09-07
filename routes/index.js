@@ -1,6 +1,7 @@
 const express = require("express");
 const User = require("../models/users");
 const Snippet = require("../models/snippets");
+const bcrypt = require('bcryptjs');
 const router = express.Router();
 const mongoose = require("mongoose");
 const passport = require('passport');
@@ -92,7 +93,6 @@ router.get("/signup", function(req, res) {
   res.render("signup");
 });
 
-// const bcrypt = require('bcryptjs');
 
 
 router.post("/signup", function(req, res) {
@@ -147,22 +147,6 @@ router.post('/edit/:id', function(req, res){
    })
 
 })
-
-////// deleting ...
-// router.get('/delete/:id', function(req, res){
-// Snippet.findOne({_id: req.params.id})
-// .then(function(data){
-//   if (data.createdBy === req.user.id) {
-//       res.render('editSnippet', data)
-//   } else {
-//     res.redirect('/user')
-//   }
-// })
-// .catch(function(err){
-//   res.redirect('/page')
-// })
-//
-// })
 
 router.post('/delete/:id', function(req, res){
    Snippet.deleteOne({_id: req.params.id})
